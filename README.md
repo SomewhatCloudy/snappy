@@ -39,8 +39,7 @@ Run the setup commands to prepare the database and search index:
 docker-compose exec web php artisan key:generate
 docker-compose exec web php artisan migrate:fresh --seed
 docker-compose exec web php artisan import:postcodes
-docker-compose exec web php artisan scout:import "App\Models\Store"
-docker-compose exec web php artisan scout:import "App\Models\Postcode"
+docker-compose exec web php artisan db:seed --class=StoreSeeder
 ```
 
 ## Common Commands
@@ -61,16 +60,4 @@ docker-compose exec web php artisan scout:import "App\Models\Postcode"
 - **Generate Routes/Functions:**
   ```shell
   docker-compose exec web php artisan wayfinder:generate --with-form
-  ```
-
-### Search (Elasticsearch)
-
-- **Check Index Status:**
-  ```shell
-  docker-compose exec web curl -X GET "elastic:9200/_cat/indices?v"
-  ```
-- **Search Indices:**
-  ```shell
-  docker-compose exec web curl -X GET "elastic:9200/stores/_search"
-  docker-compose exec web curl -X GET "elastic:9200/postcodes/_search"
   ```
