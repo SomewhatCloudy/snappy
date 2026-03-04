@@ -1,0 +1,36 @@
+services:
+    web:
+        ports:
+            - "80:80"
+            - "5173:5173"
+        build: ./vm/
+        volumes:
+            - ./:/var/www/html/
+            - ./vm/conf.d/memory_usage.ini:/usr/local/etc/php/conf.d/memory_usage.ini
+            - ./vm/conf.d/xdebug-local.ini:/usr/local/etc/php/conf.d/xdebug-local.ini
+            - ./vm/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+            - ./vm/conf.d/upload_limits.ini:/usr/local/etc/php/conf.d/upload_limits.ini
+        environment:
+            - PHP_IDE_CONFIG=serverName=snappy.local
+        links:
+            - 'mysql:mysql'
+        depends_on:
+            - mysql
+        extra_hosts:
+            - snappy.local:host-gateway
+    mysql:
+        image: mysql:oracle
+        command:
+            --local_infile=on
+            --secure_file_priv=''
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: snappy
+            MYSQL_USER: user
+            MYSQL_PASSWORD: pass
+        volumes:
+            - mysql-volume:/var/lib/mysql
+volumes:
+    mysql-volume:
